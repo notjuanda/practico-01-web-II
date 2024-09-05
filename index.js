@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session'); 
+const fileUpload = require('express-fileupload'); 
 const db = require('./models');
 const app = express();
 const path = require('path');
@@ -13,8 +14,11 @@ app.use(session({
     cookie: { secure: false }  
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload({
+    createParentPath: true
+}));
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

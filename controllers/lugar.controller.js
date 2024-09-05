@@ -1,5 +1,6 @@
 const db = require("../models");
 const Lugar = db.lugares;
+const path = require('path');
 
 exports.renderCreateLugar = (req, res) => {
     res.render('lugares/create', { title: "Crear Lugar" });
@@ -7,14 +8,16 @@ exports.renderCreateLugar = (req, res) => {
 
 exports.createLugar = async (req, res) => {
     try {
-        const { nombre, direccion, foto, usuarioId } = req.body;
+        const { nombre, direccion, usuarioId } = req.body;
+        const lugar = await Lugar.create({ nombre, direccion, usuarioId });
 
-        await Lugar.create({
-            nombre,
-            direccion,
-            foto,
-            usuarioId
-        });
+        if (req.files?.foto) {
+            const foto = req.files.foto;
+            const uploadPath = path.join(__dirname, '../public/images/restaurant', `${lugar.id}.jpg`);
+            await foto.mv(uploadPath);
+            lugar.foto = `/images/restaurant/${lugar.id}.jpg`;
+            await lugar.save();
+        }
 
         res.redirect('/lugares');
     } catch (error) {
@@ -25,10 +28,7 @@ exports.createLugar = async (req, res) => {
 
 exports.listLugares = async (req, res) => {
     try {
-        const lugares = await Lugar.findAll({
-            include: ["usuario"]
-        });
-
+        const lugares = await Lugar.findAll({ include: ["usuario"] });
         res.render('lugares/list', { title: "Lista de Lugares", lugares });
     } catch (error) {
         console.error("Error al listar lugares:", error);

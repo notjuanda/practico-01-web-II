@@ -1,6 +1,7 @@
 const db = require("../models");
 const Hamburguesa = db.hamburguesas;
 const Lugar = db.lugares;
+const path = require('path');
 
 exports.renderCreateHamburguesa = async (req, res) => {
     try {
@@ -17,12 +18,22 @@ exports.renderCreateHamburguesa = async (req, res) => {
 
 exports.createHamburguesa = async (req, res) => {
     try {
-        const { nombre, descripcion, foto, lugarId } = req.body;
+        const { nombre, descripcion, lugarId } = req.body;
         const lugar = await Lugar.findOne({ where: { id: lugarId, usuarioId: req.session.usuarioId } });
         if (!lugar) {
             return res.status(403).send("No tienes permiso para agregar hamburguesas a este restaurante.");
         }
-        await Hamburguesa.create({ nombre, descripcion, foto, lugarId });
+
+        const hamburguesa = await Hamburguesa.create({ nombre, descripcion, lugarId });
+
+        if (req.files?.foto) {
+            const foto = req.files.foto;
+            const uploadPath = path.join(__dirname, '../public/images/hamburguesa', `${hamburguesa.id}.jpg`);
+            await foto.mv(uploadPath);
+            hamburguesa.foto = `/images/hamburguesa/${hamburguesa.id}.jpg`;
+            await hamburguesa.save();
+        }
+
         res.redirect('/hamburguesas');
     } catch (error) {
         console.error("Error al crear hamburguesa:", error);
