@@ -41,9 +41,15 @@ db.sequelize.sync({ force: false })
         console.log("Base de datos sincronizada.");
     });
 
-app.get('/', (req, res) => {
-    res.render('index', { title: 'Inicio' });
-});
+    app.get('/', async (req, res) => {
+        try {
+            const lugares = await db.lugares.findAll();  
+            res.render('index', { title: 'Inicio', lugares });  
+        } catch (error) {
+            console.error('Error al obtener los lugares:', error);
+            res.status(500).send('Error al cargar la página de inicio.');
+        }
+    });
 
 require('./routes/index')(app);
 

@@ -1,5 +1,6 @@
 const db = require("../models");
 const Lugar = db.lugares;
+const Hamburguesa = db.hamburguesas;
 const path = require('path');
 
 exports.renderCreateLugar = (req, res) => {
@@ -33,5 +34,26 @@ exports.listLugares = async (req, res) => {
     } catch (error) {
         console.error("Error al listar lugares:", error);
         res.status(500).send("Error al listar lugares.");
+    }
+};
+
+exports.listHamburguesasByLugar = async (req, res) => {
+    try {
+        const lugarId = req.params.id;
+        const lugar = await Lugar.findByPk(lugarId);
+
+        if (!lugar) {
+            return res.status(404).send("Restaurante no encontrado.");
+        }
+
+        const hamburguesas = await Hamburguesa.findAll({
+            where: { lugarId },
+            include: ["lugar"]
+        });
+
+        res.render('hamburguesas/list', { title: `Hamburguesas en ${lugar.nombre}`, hamburguesas });
+    } catch (error) {
+        console.error("Error al listar hamburguesas:", error);
+        res.status(500).send("Error al listar hamburguesas.");
     }
 };

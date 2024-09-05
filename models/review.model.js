@@ -2,7 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const Review = sequelize.define("review", {
         puntuacion: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
             validate: {
                 min: 1,
                 max: 5
@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         comentario: {
             type: Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         hamburguesaId: {
             type: Sequelize.INTEGER,

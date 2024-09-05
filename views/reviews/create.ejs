@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -13,28 +14,38 @@
     <main class="container my-5">
         <h1 class="text-center">Crear Review</h1>
         <form action="/reviews/create" method="POST" class="mt-4">
-            <div class="mb-3">
+            
+            <!-- Puntuación con estrellas usando Bootstrap Icons -->
+            <div class="mb-3 text-center">
                 <label for="puntuacion" class="form-label">Puntuación</label>
-                <select id="puntuacion" name="puntuacion" class="form-control" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                <div id="star-rating" class="d-flex justify-content-center">
+                    <!-- Estrellas con Bootstrap Icons -->
+                    <input type="radio" id="estrella1" name="puntuacion" value="1" hidden>
+                    <label for="estrella1" class="bi bi-star mx-1" style="font-size: 2rem; cursor: pointer;"></label>
+
+                    <input type="radio" id="estrella2" name="puntuacion" value="2" hidden>
+                    <label for="estrella2" class="bi bi-star mx-1" style="font-size: 2rem; cursor: pointer;"></label>
+
+                    <input type="radio" id="estrella3" name="puntuacion" value="3" hidden>
+                    <label for="estrella3" class="bi bi-star mx-1" style="font-size: 2rem; cursor: pointer;"></label>
+
+                    <input type="radio" id="estrella4" name="puntuacion" value="4" hidden>
+                    <label for="estrella4" class="bi bi-star mx-1" style="font-size: 2rem; cursor: pointer;"></label>
+
+                    <input type="radio" id="estrella5" name="puntuacion" value="5" hidden>
+                    <label for="estrella5" class="bi bi-star mx-1" style="font-size: 2rem; cursor: pointer;"></label>
+                </div>
             </div>
+
             <div class="mb-3">
                 <label for="comentario" class="form-label">Comentario</label>
                 <textarea id="comentario" name="comentario" class="form-control" required></textarea>
             </div>
-            <div class="mb-3">
-                <label for="hamburguesaId" class="form-label">ID de la Hamburguesa</label>
-                <input type="number" id="hamburguesaId" name="hamburguesaId" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="usuarioId" class="form-label">ID del Usuario</label>
-                <input type="number" id="usuarioId" name="usuarioId" class="form-control" required>
-            </div>
+
+            <!-- Campos ocultos para IDs -->
+            <input type="hidden" id="hamburguesaId" name="hamburguesaId" value="<%= hamburguesaId %>">
+            <input type="hidden" id="usuarioId" name="usuarioId" value="<%= usuarioId %>">
+
             <button type="submit" class="btn btn-primary w-100">Crear Review</button>
         </form>
     </main>
@@ -42,5 +53,25 @@
     <%- include('../components/footer') %>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const stars = document.querySelectorAll('#star-rating label');
+        const radios = document.querySelectorAll('#star-rating input');
+
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                // Rellenar las estrellas hasta la seleccionada
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.replace('bi-star', 'bi-star-fill');  // Llenar la estrella
+                    } else {
+                        s.classList.replace('bi-star-fill', 'bi-star');  // Vaciar la estrella
+                    }
+                });
+
+                // Marcar el radio button correspondiente
+                radios[index].checked = true;
+            });
+        });
+    </script>
 </body>
 </html>

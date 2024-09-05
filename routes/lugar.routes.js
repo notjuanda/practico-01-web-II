@@ -10,5 +10,7 @@ module.exports = app => {
 
     router.get("/", lugarController.listLugares);
 
+    router.get("/:id/hamburguesas", lugarController.listHamburguesasByLugar);
+
     app.use('/lugares', router);
 };

@@ -1,6 +1,7 @@
 const db = require("../models");
 const Hamburguesa = db.hamburguesas;
 const Lugar = db.lugares;
+const Review = db.reviews; 
 const path = require('path');
 
 exports.renderCreateHamburguesa = async (req, res) => {
@@ -48,5 +49,30 @@ exports.listHamburguesas = async (req, res) => {
     } catch (error) {
         console.error("Error al listar hamburguesas:", error);
         res.status(500).send("Error al listar hamburguesas.");
+    }
+};
+
+exports.markAsEaten = async (req, res) => {
+    try {
+        const { id } = req.params;
+        let review = await Review.findOne({ where: { hamburguesaId: id, usuarioId: req.session.usuarioId } });
+        
+        if (!review) {
+            review = await Review.create({
+                hamburguesaId: id,
+                usuarioId: req.session.usuarioId,
+                comioHamburguesa: true,
+                puntuacion: null,  
+                comentario: null
+            });
+        } else {
+            review.comioHamburguesa = true;
+            await review.save();
+        }
+
+        res.render('reviews/askOpinion', { hamburguesaId: id, title: "¿Deseas dejar una opinión?" });
+    } catch (error) {
+        console.error("Error al marcar hamburguesa como comida:", error);
+        res.status(500).send("Error al marcar la hamburguesa como comida.");
     }
 };

@@ -11,23 +11,27 @@
     <%- include('../components/header') %>
 
     <main class="container my-5">
-        <h1 class="text-center">Lista de Reviews</h1>
-
+        <h1 class="text-center">Reseñas de la Hamburguesa</h1>
+        
         <div class="row">
-            <% reviews.forEach(review => { %>
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Hamburguesa: <%= review.hamburguesa.nombre %></h5>
-                            <p class="card-text">Puntuación: <%= review.puntuacion %></p>
-                            <p class="card-text">Comentario: <%= review.comentario %></p>
-                            <p class="card-text"><small class="text-muted">Usuario: <%= review.usuario.nombre %> <%= review.usuario.apellido %></small></p>
+            <% if (reviews && reviews.length > 0) { %>
+                <% reviews.forEach(review => { %>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Puntuación: <%= review.puntuacion %> estrellas</h5>
+                                <p class="card-text">Comentario: <%= review.comentario %></p>
+                                <p class="card-text"><small class="text-muted">Usuario: <%= review.usuario.nombre %> <%= review.usuario.apellido %></small></p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <% }) %>
+                <% }) %>
+            <% } else { %>
+                <p class="text-center">No hay reseñas para esta hamburguesa.</p>
+            <% } %>
         </div>
-        <a href="/reviews/create" class="btn btn-primary">Crear Nueva Review</a>
+
+        <a href="/hamburguesas" class="btn btn-secondary">Volver a la lista de hamburguesas</a>
     </main>
 
     <%- include('../components/footer') %>
