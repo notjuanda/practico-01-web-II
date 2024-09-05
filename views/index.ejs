@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+    <%- include('components/header') %>
+
+    <main class="container my-5">
+        <div class="text-center">
+            <h1>Bienvenido a Burger Week</h1>
+            <p class="lead">¡Explora las mejores hamburguesas de los mejores restaurantes!</p>
+            <a href="/lugares" class="btn btn-primary">Ver Restaurantes</a>
+            <a href="/hamburguesas" class="btn btn-secondary">Ver Hamburguesas</a>
+        </div>
+    </main>
+
+    <%- include('components/footer') %>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

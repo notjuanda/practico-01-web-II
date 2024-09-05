@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Burger Week</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <% if (usuarioNombre) { %>
+                    <li class="nav-item">
+                        <span class="nav-link">Hola, <%= usuarioNombre %>!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usuarios/logout">Cerrar sesión</a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usuarios/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usuarios/register">Registro</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>

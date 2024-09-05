@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+    <%- include('../components/header') %>
+
+    <main class="container my-5">
+        <h1 class="text-center">Crear Hamburguesa</h1>
+
+        <form action="/hamburguesas/create" method="POST" class="mt-4">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre de la Hamburguesa</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea id="descripcion" name="descripcion" class="form-control" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="foto" class="form-label">URL de la Foto</label>
+                <input type="text" id="foto" name="foto" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="lugarId" class="form-label">Selecciona tu Restaurante</label>
+                <select id="lugarId" name="lugarId" class="form-control" required>
+                    <% lugares.forEach(lugar => { %>
+                        <option value="<%= lugar.id %>"><%= lugar.nombre %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Crear Hamburguesa</button>
+        </form>
+    </main>
+
+    <%- include('../components/footer') %>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

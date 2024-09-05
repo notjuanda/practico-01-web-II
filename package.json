@@ -1,0 +1,27 @@
+{
+  "name": "01-practico",
+  "version": "1.0.0",
+  "description": "practico 1 web ii",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "Juan David Viveros Chavez",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "bootstrap": "^5.3.3",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "ejs-lint": "^2.0.0",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.4",
+    "pg": "^8.12.0",
+    "sequelize": "^6.37.3"
+  }
+}
