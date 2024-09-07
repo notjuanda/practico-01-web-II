@@ -16,7 +16,7 @@ exports.marcarHamburguesaComida = async (req, res) => {
                 usuario_id: req.session.usuarioId,
                 hamburguesa_id: hamburguesaId
             });
-            res.redirect(`/hamburguesas/${hamburguesaId}/detalle`);
+            res.redirect(`/hamburguesas/${hamburguesaId}/detalle`); // Redirigir a la página de detalles
         } else {
             res.status(400).send('Ya has marcado esta hamburguesa como comida');
         }

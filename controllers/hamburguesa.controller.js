@@ -1,6 +1,9 @@
 const db = require('../models');
 const Hamburguesa = db.Hamburguesa;
 const Restaurante = db.Restaurante;
+const HamburguesaComida = db.HamburguesaComida;
+const Review = db.Review;
+
 const path = require('path');
 
 // Mostrar todas las hamburguesas (admin)
@@ -23,16 +26,44 @@ exports.listaHamburguesasPorRestaurante = async (req, res) => {
     }
 };
 
-// Mostrar detalles de una hamburguesa (usuario normal)
 exports.detalleHamburguesa = async (req, res) => {
     try {
         const hamburguesa = await Hamburguesa.findByPk(req.params.id);
-        res.render('hamburguesas/detalle', { hamburguesa });
+        if (!hamburguesa) {
+            return res.status(404).send('Hamburguesa no encontrada');
+        }
+
+        // Verificar si el usuario ha marcado la hamburguesa como comida
+        let comida = false;
+        let yaDejoReview = false;
+        if (req.session.usuarioId) {
+            const hamburguesaComida = await HamburguesaComida.findOne({
+                where: {
+                    usuario_id: req.session.usuarioId,
+                    hamburguesa_id: req.params.id
+                }
+            });
+            comida = !!hamburguesaComida;
+
+            // Verificar si el usuario ya dejó un review para esta hamburguesa
+            const reviewExistente = await Review.findOne({
+                where: { usuario_id: req.session.usuarioId, hamburguesa_id: req.params.id }
+            });
+            yaDejoReview = !!reviewExistente; // true si ya dejó una reseña
+        }
+
+        // Obtener los reviews de la hamburguesa
+        const reviews = await Review.findAll({
+            where: { hamburguesa_id: req.params.id },
+            include: [{ model: db.Usuario, attributes: ['nombre'] }]
+        });
+
+        // Renderizar la vista con la información
+        res.render('hamburguesas/detalle', { hamburguesa, comida, reviews, yaDejoReview });
     } catch (error) {
-        res.status(500).send('Error al obtener los detalles de la hamburguesa');
+        res.status(500).send('Error al obtener los detalles de la hamburguesa.');
     }
 };
-
 
 // Crear hamburguesa (admin)
 exports.crearHamburguesaFormAdmin = async (req, res) => {

@@ -8,25 +8,39 @@ exports.crearReviewPost = async (req, res) => {
     const hamburguesaId = req.params.id;
 
     try {
+        // Verificar si el usuario ha marcado la hamburguesa como comida
         const comioHamburguesa = await HamburguesaComida.findOne({
             where: { usuario_id: req.session.usuarioId, hamburguesa_id: hamburguesaId }
         });
 
         if (comioHamburguesa) {
-            await Review.create({
-                puntuacion,
-                comentario,
-                usuario_id: req.session.usuarioId,
-                hamburguesa_id: hamburguesaId
+            // Verificar si el usuario ya ha dejado una reseña para esta hamburguesa
+            const yaDejoReview = await Review.findOne({
+                where: { usuario_id: req.session.usuarioId, hamburguesa_id: hamburguesaId }
             });
-            res.redirect(`/hamburguesas/${hamburguesaId}/reviews`);
+
+            if (yaDejoReview) {
+                // Si ya ha dejado un review, redirigir con un mensaje de error
+                return res.redirect(`/hamburguesas/${hamburguesaId}/detalle?error=review_exists`);
+            } else {
+                // Crear el review
+                await Review.create({
+                    puntuacion,
+                    comentario,
+                    usuario_id: req.session.usuarioId,
+                    hamburguesa_id: hamburguesaId
+                });
+
+                // Redirigir de nuevo a los detalles de la hamburguesa
+                res.redirect(`/hamburguesas/${hamburguesaId}/detalle`);
+            }
         } else {
-            res.status(403).send('No puedes dejar un review sin haber marcado que comiste la hamburguesa');
+            res.status(403).send('No puedes dejar un review sin haber marcado que comiste la hamburguesa.');
         }
     } catch (error) {
-        res.status(500).send('Error al crear el review');
+        res.status(500).send('Error al crear el review.');
     }
-};
+};  
 
 // Mostrar los reviews de una hamburguesa
 exports.listaReviews = async (req, res) => {

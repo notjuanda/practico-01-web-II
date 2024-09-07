@@ -11,7 +11,4 @@ const hamburguesaController = require('../controllers/hamburguesa.controller');
 router.get('/lista', controller.listaRestaurantes);  // Catálogo completo (usuario normal)
 router.get('/:id/detalle', controller.detalleRestaurante);  // Detalles de un restaurante (usuario normal)
 
-router.get('/:id/hamburguesas', hamburguesaController.listaHamburguesasPorRestaurante);  // Esta es la nueva ruta que añadimos.
-
-
 module.exports = router;

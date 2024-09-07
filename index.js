@@ -45,6 +45,9 @@ app.use(express.urlencoded({ extended: true }));
 // Cargar archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Cargar archivos estáticos desde la carpeta 'utils'
+app.use('/utils', express.static(path.join(__dirname, 'utils')));
+
 // Importar middleware de autenticación
 const authMiddleware = require('./middlewares/authMiddleware');
 
