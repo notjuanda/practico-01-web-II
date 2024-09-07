@@ -18,18 +18,26 @@
             </div>
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><%= hamburguesa.descripcion %></textarea>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required><%= hamburguesa.descripcion %></textarea>
             </div>
             <div class="mb-3">
                 <label for="precio" class="form-label">Precio</label>
                 <input type="number" class="form-control" id="precio" name="precio" value="<%= hamburguesa.precio %>" step="0.01" required>
             </div>
             <div class="mb-3">
+                <label for="restaurante_id" class="form-label">Restaurante</label>
+                <select class="form-control" id="restaurante_id" name="restaurante_id" required>
+                    <% restaurantes.forEach(function(restaurante) { %>
+                        <option value="<%= restaurante.id %>" <%= restaurante.id === hamburguesa.restaurante_id ? 'selected' : '' %>>
+                            <%= restaurante.nombre %>
+                        </option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="imagen" class="form-label">Subir Nueva Imagen</label>
                 <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
-                <% if (hamburguesa.imagen) { %>
-                    <p>Imagen actual: <img src="/images/hamburguesas/<%= hamburguesa.id %>.jpg" alt="Imagen de la Hamburguesa" width="100"></p>
-                <% } %>
+                <p>Imagen actual: <img src="/images/hamburguesas/<%= hamburguesa.id %>.jpg" alt="Imagen de la Hamburguesa" width="100"></p>
             </div>
             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </form>

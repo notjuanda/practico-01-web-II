@@ -25,11 +25,19 @@
                 <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
             </div>
             <div class="mb-3">
+                <label for="restaurante_id" class="form-label">Restaurante</label>
+                <select class="form-control" id="restaurante_id" name="restaurante_id" required>
+                    <% restaurantes.forEach(function(restaurante) { %>
+                        <option value="<%= restaurante.id %>"><%= restaurante.nombre %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="imagen" class="form-label">Subir Imagen</label>
                 <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
             </div>
             <button type="submit" class="btn btn-primary">Crear Hamburguesa</button>
-        </form>
+        </form>        
     </main>
 
     <%- include('../components/footer') %>

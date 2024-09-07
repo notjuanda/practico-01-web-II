@@ -30,10 +30,6 @@ router.post('/restaurantes/:id/editar', restauranteController.editarRestauranteP
 // Eliminar restaurante (admin)
 router.post('/restaurantes/:id/borrar', restauranteController.borrarRestauranteAdmin);
 
-// Subida de imagen de restaurante (admin)
-router.get('/restaurantes/:id/imagen', restauranteController.uploadImagenFormAdmin);
-router.post('/restaurantes/:id/imagen', restauranteController.uploadImagenPostAdmin);
-
 // ========================
 // Rutas de administración para hamburguesas
 // ========================
@@ -51,9 +47,5 @@ router.post('/hamburguesas/:id/editar', hamburguesaController.editarHamburguesaP
 
 // Eliminar hamburguesa (admin)
 router.post('/hamburguesas/:id/borrar', hamburguesaController.borrarHamburguesaAdmin);
-
-// Subida de imagen de hamburguesa (admin)
-router.get('/hamburguesas/:id/imagen', hamburguesaController.uploadImagenFormAdmin);
-router.post('/hamburguesas/:id/imagen', hamburguesaController.uploadImagenPostAdmin);
 
 module.exports = router;

@@ -22,13 +22,15 @@
             </div>
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><%= restaurante.descripcion %></textarea>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required><%= restaurante.descripcion %></textarea>
             </div>
             <div class="mb-3">
                 <label for="imagen" class="form-label">Subir Nueva Imagen</label>
                 <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
-                <% if (restaurante.imagen) { %>
-                    <p>Imagen actual: <img src="/images/restaurantes/<%= restaurante.id %>.jpg" alt="Imagen del Restaurante" width="100"></p>
+                <% if (restaurante) { %>
+                    <p>Imagen actual: 
+                        <img src="/images/restaurantes/<%= restaurante.id %>.jpg" alt="Imagen del Restaurante" width="100">
+                    </p>
                 <% } %>
             </div>
             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
