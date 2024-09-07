@@ -3,6 +3,16 @@ const Hamburguesa = db.Hamburguesa;
 const Restaurante = db.Restaurante;
 const path = require('path');
 
+// Mostrar todas las hamburguesas (admin)
+exports.listaHamburguesasAdmin = async (req, res) => {
+    try {
+        const hamburguesas = await Hamburguesa.findAll();
+        res.render('admin/hamburguesas/lista', { hamburguesas });
+    } catch (error) {
+        res.status(500).send('Error al obtener las hamburguesas');
+    }
+};
+
 // Mostrar hamburguesas de un restaurante específico (usuario normal)
 exports.listaHamburguesasPorRestaurante = async (req, res) => {
     try {
@@ -23,15 +33,6 @@ exports.detalleHamburguesa = async (req, res) => {
     }
 };
 
-// Mostrar todas las hamburguesas (admin)
-exports.listaHamburguesasAdmin = async (req, res) => {
-    try {
-        const hamburguesas = await Hamburguesa.findAll();
-        res.render('admin/hamburguesas/lista', { hamburguesas });
-    } catch (error) {
-        res.status(500).send('Error al obtener las hamburguesas');
-    }
-};
 
 // Crear hamburguesa (admin)
 exports.crearHamburguesaFormAdmin = async (req, res) => {

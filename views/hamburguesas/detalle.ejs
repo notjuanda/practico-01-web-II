@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Hamburguesa</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('../components/header') %>
+
+    <main class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="/images/hamburguesas/<%= hamburguesa.id %>.jpg" class="img-fluid" alt="Imagen de la Hamburguesa">
+            </div>
+            <div class="col-md-6">
+                <h1><%= hamburguesa.nombre %></h1>
+                <p><%= hamburguesa.descripcion %></p>
+                <p>Precio: $<%= hamburguesa.precio %></p>
+
+                <!-- Botón para marcar la hamburguesa como comida -->
+                <form action="/hamburguesas/<%= hamburguesa.id %>/comida" method="POST">
+                    <button type="submit" class="btn btn-success">Marcar como Comida</button>
+                </form>
+
+                <!-- Si ya está marcada como comida, mostrar botón para dejar review -->
+                <% if (comida) { %>
+                    <form action="/hamburguesas/<%= hamburguesa.id %>/review" method="POST">
+                        <div class="mb-3">
+                            <label for="puntuacion" class="form-label">Puntuación</label>
+                            <input type="number" class="form-control" id="puntuacion" name="puntuacion" min="1" max="5" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comentario" class="form-label">Comentario</label>
+                            <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar Review</button>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <%- include('../components/footer') %>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

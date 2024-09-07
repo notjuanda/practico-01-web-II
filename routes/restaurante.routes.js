@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/restaurante.controller');
+const hamburguesaController = require('../controllers/hamburguesa.controller');
 
 // ========================
 // Rutas para usuarios normales
@@ -9,5 +10,8 @@ const controller = require('../controllers/restaurante.controller');
 // Mostrar el catálogo completo de restaurantes
 router.get('/lista', controller.listaRestaurantes);  // Catálogo completo (usuario normal)
 router.get('/:id/detalle', controller.detalleRestaurante);  // Detalles de un restaurante (usuario normal)
+
+router.get('/:id/hamburguesas', hamburguesaController.listaHamburguesasPorRestaurante);  // Esta es la nueva ruta que añadimos.
+
 
 module.exports = router;

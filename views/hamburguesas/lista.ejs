@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurantes | BurgerWeek</title>
+    <title>Hamburguesas del Restaurante</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <%- include('../components/header') %>
 
     <main class="container mt-5">
-        <h1 class="mb-4 text-center">Restaurantes</h1>
+        <h1 class="mb-4 text-center">Hamburguesas</h1>
         <div class="row">
-            <% restaurantes.forEach(function(restaurante) { %>
+            <% hamburguesas.forEach(function(hamburguesa) { %>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <img src="/images/restaurantes/<%= restaurante.id %>.jpg" class="card-img-top" alt="Imagen del Restaurante">
+                        <img src="/images/hamburguesas/<%= hamburguesa.id %>.jpg" class="card-img-top" alt="Imagen de la Hamburguesa">
                         <div class="card-body">
-                            <h5 class="card-title"><%= restaurante.nombre %></h5>
-                            <p class="card-text">Dirección: <%= restaurante.ubicacion %></p>
-                            <a href="/restaurantes/<%= restaurante.id %>/hamburguesas" class="btn btn-primary">Ver Hamburguesas</a>
+                            <h5 class="card-title"><%= hamburguesa.nombre %></h5>
+                            <p class="card-text">Descripción: <%= hamburguesa.descripcion %></p>
+                            <p class="card-text">Precio: $<%= hamburguesa.precio %></p>
+                            <a href="/hamburguesas/<%= hamburguesa.id %>/detalle" class="btn btn-primary">Ver Detalles</a>
                         </div>
                     </div>
                 </div>
