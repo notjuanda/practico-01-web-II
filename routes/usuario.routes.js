@@ -1,16 +1,14 @@
-module.exports = app => {
-    let router = require("express").Router();
-    const usuarioController = require("../controllers/usuario.controller");
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/usuario.controller');
 
-    router.get("/register", usuarioController.renderRegister);
+// Rutas de usuarios
+router.get('/register', controller.registerForm);
+router.post('/register', controller.registerPost);
 
-    router.post("/register", usuarioController.register);
+router.get('/login', controller.loginForm);
+router.post('/login', controller.loginPost);
 
-    router.get("/login", usuarioController.renderLogin);
+router.get('/logout', controller.logout);
 
-    router.post("/login", usuarioController.login);
-
-    router.get("/logout", usuarioController.logout);
-
-    app.use('/usuarios', router);
-};
+module.exports = router;

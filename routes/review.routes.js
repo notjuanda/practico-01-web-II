@@ -1,14 +1,12 @@
-const isAuthenticated = require('../middleware/isAuthenticated');
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/review.controller');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-module.exports = app => {
-    let router = require("express").Router();
-    const reviewController = require("../controllers/review.controller");
+// Crear un review si el usuario ha marcado que comió la hamburguesa
+router.post('/:id/create', authMiddleware, controller.crearReviewPost);
 
-    router.get("/create", isAuthenticated, reviewController.renderCreateReview);
+// Mostrar los reviews de una hamburguesa
+router.get('/:id/lista', controller.listaReviews);
 
-    router.post("/create", isAuthenticated, reviewController.createReview);
-
-    router.get("/", reviewController.listReviews);
-
-    app.use('/reviews', router);
-};
+module.exports = router;

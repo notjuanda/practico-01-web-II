@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Hamburguesa</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('../components/header') %>
+
+    <main class="container mt-5">
+        <h1>Crear Hamburguesa</h1>
+        <form action="/admin/hamburguesas/crear" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre de la Hamburguesa</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="precio" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="imagen" class="form-label">Subir Imagen</label>
+                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Hamburguesa</button>
+        </form>
+    </main>
+
+    <%- include('../components/footer') %>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

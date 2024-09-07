@@ -1,59 +1,73 @@
 const express = require('express');
-const session = require('express-session'); 
-const fileUpload = require('express-fileupload'); 
-const db = require('./models');
-const app = express();
+const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const path = require('path');
+const fileUpload = require('express-fileupload'); 
 
-app.set('view engine', 'ejs');
+// Importar modelos
+const db = require('./models');
 
+// Inicializar express
+const app = express();
+
+// Configurar el uso de sesiones con almacenamiento en Sequelize
 app.use(session({
-    secret: 'mi-secreto', 
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }  
+    secret: 'juanda-secreto',  // Cambia este valor por algo más seguro en producción
+    store: new SequelizeStore({
+        db: db.sequelize,
+    }),
+    resave: false,  // No vuelve a guardar la sesión si no ha cambiado
+    saveUninitialized: false,  // No guarda sesiones vacías
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24  // La sesión expira en 1 día
+    }
 }));
 
+// Usar fileUpload para manejar subida de archivos
 app.use(fileUpload({
-    createParentPath: true
+    createParentPath: true,
+    limits: { fileSize: 50 * 1024 * 1024 },  // Limite de tamaño de archivo de 50MB
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
+// Middleware para hacer que la variable `user` esté disponible en todas las vistas
 app.use((req, res, next) => {
-    res.locals.usuarioNombre = req.session.usuarioNombre;
-    res.locals.usuarioId = req.session.usuarioId;
+    res.locals.user = req.session.user || null;
     next();
 });
 
-db.sequelize.authenticate()
-    .then(() => {
-        console.log('Conexión a la base de datos exitosa.');
-    })
-    .catch(err => {
-        console.error('Error al conectar con la base de datos:', err);
-    });
+// Configurar ejs para las vistas
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-db.sequelize.sync({ force: false })
-    .then(() => {
-        console.log("Base de datos sincronizada.");
-    });
+// Configurar middleware para manejar datos enviados en formularios
+app.use(express.urlencoded({ extended: true }));
 
-    app.get('/', async (req, res) => {
-        try {
-            const lugares = await db.lugares.findAll();  
-            res.render('index', { title: 'Inicio', lugares });  
-        } catch (error) {
-            console.error('Error al obtener los lugares:', error);
-            res.status(500).send('Error al cargar la página de inicio.');
-        }
-    });
+// Cargar archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 
-require('./routes/index')(app);
+// Importar middleware de autenticación
+const authMiddleware = require('./middlewares/authMiddleware');
 
+// Importar las rutas centralizadas
+const routes = require('./routes');  // Rutas centralizadas en 'routes/index.js'
+
+// Cargar las rutas desde 'routes/index.js'
+app.use('/', routes);
+
+// Ruta para la página principal
+app.get('/', (req, res) => {
+    res.render('index', { title: 'Página Principal' });  // Renderizar la vista 'index.ejs'
+});
+
+// Conexión a la base de datos y sincronización
+db.sequelize.sync().then(() => {
+    console.log("Base de datos conectada y sincronizada.");
+}).catch((err) => {
+    console.log("Error al sincronizar la base de datos:", err);
+});
+
+// Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}.`);
+    console.log(`Servidor iniciado en http://localhost:${PORT}`);
 });

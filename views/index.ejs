@@ -3,42 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>BurgerWeek</title>
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Fondo claro */
+        }
+        h1 {
+            font-weight: bold;
+            margin-top: 2rem;
+        }
+        p {
+            font-size: 1.2rem;
+        }
+    </style>
 </head>
 <body>
-
+    <!-- Incluir el header -->
     <%- include('components/header') %>
 
-    <main class="container my-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="text-center">Restaurantes</h1>
-            <a href="/lugares/create" class="btn btn-primary">Crear Restaurante</a>
-        </div>
-
-        <div class="row">
-            <% if (lugares && lugares.length > 0) { %>
-                <% lugares.forEach(lugar => { %>
-                    <div class="col-md-4 mb-4">
-                        <a href="/lugares/<%= lugar.id %>/hamburguesas" class="text-decoration-none">
-                            <div class="card h-100">
-                                <img src="<%= lugar.foto ? lugar.foto : '/images/default-restaurant.jpg' %>" class="card-img-top" alt="<%= lugar.nombre %>">
-                                <div class="card-body">
-                                    <h5 class="card-title"><%= lugar.nombre %></h5>
-                                    <p class="card-text"><%= lugar.direccion %></p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                <% }) %>
-            <% } else { %>
-                <p class="text-center">No hay restaurantes disponibles.</p>
-            <% } %>
+    <!-- Contenido principal -->
+    <main class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="display-4">Bienvenido a BurgerWeek</h1>
+                <p class="lead">Explora restaurantes, disfruta de las mejores hamburguesas y comparte tus reseñas.</p>
+                <a href="/restaurantes/lista" class="btn btn-primary btn-lg mt-3">Ver Restaurantes</a>
+            </div>
         </div>
     </main>
 
+    <!-- Incluir el footer -->
     <%- include('components/footer') %>
 
+    <!-- Bootstrap JS -->
     <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

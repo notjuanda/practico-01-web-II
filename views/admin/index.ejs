@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | BurgerWeek</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('./components/header') %>
+
+    <main class="container mt-5">
+        <h1 class="text-center mb-5">Panel de Administración</h1>
+        <div class="row text-center">
+            <div class="col-md-6 mb-4">
+                <a href="/admin/restaurantes/lista" class="btn btn-primary w-100 py-3">Ver Restaurantes</a>
+            </div>
+            <div class="col-md-6 mb-4">
+                <a href="/admin/hamburguesas/lista" class="btn btn-primary w-100 py-3">Ver Hamburguesas</a>
+            </div>
+        </div>
+    </main>
+
+    <%- include('./components/footer') %>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

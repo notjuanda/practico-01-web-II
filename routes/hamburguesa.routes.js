@@ -1,18 +1,13 @@
-const isAuthenticated = require('../middleware/isAuthenticated');
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/hamburguesa.controller');
 
-module.exports = app => {
-    let router = require("express").Router();
-    const hamburguesaController = require("../controllers/hamburguesa.controller");
-    const reviewController = require("../controllers/review.controller");
+// ========================
+// Rutas para usuarios normales
+// ========================
 
-    router.get("/create", isAuthenticated, hamburguesaController.renderCreateHamburguesa);
-    router.post("/create", isAuthenticated, hamburguesaController.createHamburguesa);
+// Mostrar hamburguesas de un restaurante específico (usuario normal)
+router.get('/restaurantes/:id/hamburguesas', controller.listaHamburguesasPorRestaurante);  // Lista de hamburguesas por restaurante
+router.get('/hamburguesas/:id/detalle', controller.detalleHamburguesa);  // Detalles de una hamburguesa
 
-    router.get("/", hamburguesaController.listHamburguesas);
-
-    router.post("/:id/eat", isAuthenticated, hamburguesaController.markAsEaten);
-
-    router.get("/:id/reviews", reviewController.listReviewsForHamburguesa);
-
-    app.use('/hamburguesas', router);
-};
+module.exports = router;

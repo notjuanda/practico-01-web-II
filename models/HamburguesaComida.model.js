@@ -1,14 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("Review", {
-        puntuacion: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            validate: { min: 1, max: 5 }
-        },
-        comentario: {
-            type: DataTypes.TEXT,
-            allowNull: false
-        },
+    return sequelize.define("HamburguesaComida", {
         usuario_id: {
             type: DataTypes.INTEGER,
             references: {

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Restaurante</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('../components/header') %>
+
+    <main class="container mt-5">
+        <h1>Editar Restaurante</h1>
+        <form action="/admin/restaurantes/<%= restaurante.id %>/editar" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre del Restaurante</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= restaurante.nombre %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="ubicacion" class="form-label">Ubicación</label>
+                <input type="text" class="form-control" id="ubicacion" name="ubicacion" value="<%= restaurante.ubicacion %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><%= restaurante.descripcion %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="imagen" class="form-label">Subir Nueva Imagen</label>
+                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                <% if (restaurante.imagen) { %>
+                    <p>Imagen actual: <img src="/images/restaurantes/<%= restaurante.id %>.jpg" alt="Imagen del Restaurante" width="100"></p>
+                <% } %>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </main>
+
+    <%- include('../components/footer') %>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,78 +1,109 @@
-const db = require("../models");
-const Hamburguesa = db.hamburguesas;
-const Lugar = db.lugares;
-const Review = db.reviews; 
+const db = require('../models');
+const Hamburguesa = db.Hamburguesa;
 const path = require('path');
 
-exports.renderCreateHamburguesa = async (req, res) => {
+// Mostrar hamburguesas de un restaurante específico (usuario normal)
+exports.listaHamburguesasPorRestaurante = async (req, res) => {
     try {
-        const lugares = await Lugar.findAll({ where: { usuarioId: req.session.usuarioId } });
-        if (lugares.length === 0) {
-            return res.status(403).send("Debes ser dueño de al menos un restaurante para crear una hamburguesa.");
-        }
-        res.render('hamburguesas/create', { title: "Crear Hamburguesa", lugares });
+        const hamburguesas = await Hamburguesa.findAll({ where: { restaurante_id: req.params.id } });
+        res.render('hamburguesas/lista', { hamburguesas });
     } catch (error) {
-        console.error("Error al renderizar la página de creación de hamburguesas:", error);
-        res.status(500).send("Error al cargar la página de creación.");
+        res.status(500).send('Error al obtener las hamburguesas del restaurante');
     }
 };
 
-exports.createHamburguesa = async (req, res) => {
+// Mostrar detalles de una hamburguesa (usuario normal)
+exports.detalleHamburguesa = async (req, res) => {
     try {
-        const { nombre, descripcion, lugarId } = req.body;
-        const lugar = await Lugar.findOne({ where: { id: lugarId, usuarioId: req.session.usuarioId } });
-        if (!lugar) {
-            return res.status(403).send("No tienes permiso para agregar hamburguesas a este restaurante.");
-        }
-
-        const hamburguesa = await Hamburguesa.create({ nombre, descripcion, lugarId });
-
-        if (req.files?.foto) {
-            const foto = req.files.foto;
-            const uploadPath = path.join(__dirname, '../public/images/hamburguesa', `${hamburguesa.id}.jpg`);
-            await foto.mv(uploadPath);
-            hamburguesa.foto = `/images/hamburguesa/${hamburguesa.id}.jpg`;
-            await hamburguesa.save();
-        }
-
-        res.redirect('/hamburguesas');
+        const hamburguesa = await Hamburguesa.findByPk(req.params.id);
+        res.render('hamburguesas/detalle', { hamburguesa });
     } catch (error) {
-        console.error("Error al crear hamburguesa:", error);
-        res.status(500).send("Error al crear hamburguesa.");
+        res.status(500).send('Error al obtener los detalles de la hamburguesa');
     }
 };
 
-exports.listHamburguesas = async (req, res) => {
+// Mostrar todas las hamburguesas (admin)
+exports.listaHamburguesasAdmin = async (req, res) => {
     try {
-        const hamburguesas = await Hamburguesa.findAll({ include: ["lugar"] });
-        res.render('hamburguesas/list', { title: "Lista de Hamburguesas", hamburguesas });
+        const hamburguesas = await Hamburguesa.findAll();
+        res.render('admin/hamburguesas/lista', { hamburguesas });
     } catch (error) {
-        console.error("Error al listar hamburguesas:", error);
-        res.status(500).send("Error al listar hamburguesas.");
+        res.status(500).send('Error al obtener las hamburguesas');
     }
 };
 
-exports.markAsEaten = async (req, res) => {
-    try {
-        const { id } = req.params;
-        let review = await Review.findOne({ where: { hamburguesaId: id, usuarioId: req.session.usuarioId } });
-        
-        if (!review) {
-            review = await Review.create({
-                hamburguesaId: id,
-                usuarioId: req.session.usuarioId,
-                comioHamburguesa: true,
-                puntuacion: null,  
-                comentario: null
-            });
-        } else {
-            review.comioHamburguesa = true;
-            await review.save();
-        }
+// Crear hamburguesa (admin)
+exports.crearHamburguesaFormAdmin = (req, res) => {
+    res.render('admin/hamburguesas/crear', { restauranteId: req.params.id });
+};
 
-        res.render('reviews/askOpinion', { hamburguesaId: id, title: "¿Deseas dejar una opinión?" });
+// Procesar creación de una nueva hamburguesa (admin)
+exports.crearHamburguesaPostAdmin = async (req, res) => {
+    const { nombre, descripcion, precio } = req.body;
+    try {
+        await Hamburguesa.create({ nombre, descripcion, precio, restaurante_id: req.params.id });
+        res.redirect('/admin/hamburguesas/lista');
     } catch (error) {
-        console.error("Error al marcar hamburguesa como comida:", error);
-        res.status(500).send("Error al marcar la hamburguesa como comida.");
+        res.status(500).send('Error al crear la hamburguesa');
     }
+};
+
+// Mostrar formulario para editar una hamburguesa (admin)
+exports.editarHamburguesaFormAdmin = async (req, res) => {
+    try {
+        const hamburguesa = await Hamburguesa.findByPk(req.params.id);
+        res.render('admin/hamburguesas/editar', { hamburguesa });
+    } catch (error) {
+        res.status(500).send('Error al cargar el formulario de edición');
+    }
+};
+
+// Procesar la edición de una hamburguesa (admin)
+exports.editarHamburguesaPostAdmin = async (req, res) => {
+    const { nombre, descripcion, precio } = req.body;
+    try {
+        await Hamburguesa.update({ nombre, descripcion, precio }, { where: { id: req.params.id } });
+        res.redirect('/admin/hamburguesas/lista');
+    } catch (error) {
+        res.status(500).send('Error al actualizar la hamburguesa');
+    }
+};
+
+// Procesar la eliminación de una hamburguesa (admin)
+exports.borrarHamburguesaAdmin = async (req, res) => {
+    try {
+        await Hamburguesa.destroy({ where: { id: req.params.id } });
+        res.redirect('/admin/hamburguesas/lista');
+    } catch (error) {
+        res.status(500).send('Error al eliminar la hamburguesa');
+    }
+};
+
+// Subida de imagen para una hamburguesa (admin)
+exports.uploadImagenFormAdmin = async function (req, res) {
+    const id = req.params.id;
+    const hamburguesa = await Hamburguesa.findByPk(id);
+    res.render('admin/hamburguesas/uploadImagen', { hamburguesa: hamburguesa, errors: null });
+};
+
+exports.uploadImagenPostAdmin = async function (req, res) {
+    const id = req.params.id;
+    const hamburguesa = await Hamburguesa.findByPk(id);
+
+    if (!req.files?.imagen) {  // Verificar si hay un archivo de imagen
+        res.render('admin/hamburguesas/uploadImagen', { errors: { message: 'Debe seleccionar una imagen' }, hamburguesa });
+        return;
+    }
+
+    const imagen = req.files.imagen;
+    const imagenPath = path.join(__dirname, '..', 'public', 'images', 'hamburguesas', `${hamburguesa.id}.jpg`);
+
+    imagen.mv(imagenPath, function (err) {
+        if (err) {
+            res.render('admin/hamburguesas/uploadImagen', { errors: { message: 'Error al subir la imagen' }, hamburguesa });
+            console.log(err);
+            return;
+        }
+        res.redirect('/admin/hamburguesas/lista');  // Redirigir a la lista de hamburguesas después de la subida
+    });
 };

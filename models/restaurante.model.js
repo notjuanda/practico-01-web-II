@@ -1,21 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("Usuario", {
+    return sequelize.define("Restaurante", {
         nombre: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        apellido: {
+        ubicacion: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+        descripcion: {
+            type: DataTypes.TEXT,
+            allowNull: true
         },
-        password: {
+        imagen: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         }
     });
 };

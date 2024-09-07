@@ -1,60 +1,53 @@
-const db = require("../models");
-const bcrypt = require("bcrypt");
-const Usuario = db.usuarios;
+const db = require('../models');
+const bcrypt = require('bcrypt');
+const Usuario = db.Usuario;
 
-exports.renderRegister = (req, res) => {
-    res.render('usuarios/register', { title: "Registro" });
+// Mostrar el formulario de registro
+exports.registerForm = (req, res) => {
+    res.render('usuarios/register');
 };
 
-exports.register = async (req, res) => {
+// Procesar el registro de usuario
+exports.registerPost = async (req, res) => {
+    const { nombre, apellido, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
     try {
-        const { nombre, apellido, email, password } = req.body;
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        await Usuario.create({
-            nombre,
-            apellido,
-            email,
-            password: hashedPassword
-        });
-
+        await Usuario.create({ nombre, apellido, email, password: hashedPassword });
         res.redirect('/usuarios/login');
     } catch (error) {
-        console.error("Error al registrar usuario:", error);
-        res.status(500).send("Error al registrar usuario.");
+        res.status(500).send('Error en el registro');
     }
 };
 
-exports.renderLogin = (req, res) => {
-    res.render('usuarios/login', { title: "Login" });
+// Mostrar el formulario de login
+exports.loginForm = (req, res) => {
+    res.render('usuarios/login');
 };
 
-exports.login = async (req, res) => {
+// Procesar el login de usuario
+exports.loginPost = async (req, res) => {
+    const { email, password } = req.body;
     try {
-        const { email, password } = req.body;
         const usuario = await Usuario.findOne({ where: { email } });
-
-        if (!usuario) {
-            return res.status(400).send("Usuario no encontrado.");
+        if (usuario && await bcrypt.compare(password, usuario.password)) {
+            // Guardar el ID y el nombre del usuario en la sesión
+            req.session.usuarioId = usuario.id;
+            req.session.nombreUsuario = usuario.nombre;  // Guardar el nombre del usuario en la sesión
+            res.redirect('/restaurantes/lista');
+        } else {
+            res.status(401).send('Credenciales incorrectas');
         }
-
-        const isPasswordValid = await bcrypt.compare(password, usuario.password);
-        if (!isPasswordValid) {
-            return res.status(400).send("Contraseña incorrecta.");
-        }
-        
-        req.session.usuarioId = usuario.id;
-        req.session.usuarioNombre = usuario.nombre;
-
-        res.redirect('/');
     } catch (error) {
-        console.error("Error en el login:", error);
-        res.status(500).send("Error en el login.");
+        res.status(500).send('Error al procesar el login');
     }
 };
 
+// Logout del usuario
 exports.logout = (req, res) => {
-    req.session.destroy(); 
-    res.redirect('/usuarios/login'); 
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send('Error al cerrar sesión');
+        }
+        res.redirect('/usuarios/login');
+    });
 };

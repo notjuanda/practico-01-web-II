@@ -1,26 +1,28 @@
-module.exports = (sequelize, Sequelize) => {
-    const Hamburguesa = sequelize.define("hamburguesa", {
+module.exports = (sequelize, DataTypes) => {
+    return sequelize.define("Hamburguesa", {
         nombre: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         },
         descripcion: {
-            type: Sequelize.TEXT,
+            type: DataTypes.TEXT,
             allowNull: false
         },
-        foto: {
-            type: Sequelize.STRING,
+        precio: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false
+        },
+        imagen: {
+            type: DataTypes.STRING,
             allowNull: true
         },
-        lugarId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
+        restaurante_id: {
+            type: DataTypes.INTEGER,
             references: {
-                model: 'lugares', 
+                model: 'Restaurantes',
                 key: 'id'
-            }
+            },
+            allowNull: false
         }
     });
-
-    return Hamburguesa;
 };
