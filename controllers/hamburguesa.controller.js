@@ -89,26 +89,28 @@ exports.crearHamburguesaFormAdmin = async (req, res) => {
     }
 };
 
-// Procesar creación de una nueva hamburguesa (admin)
+// Crear hamburguesa (admin)
 exports.crearHamburguesaPostAdmin = async (req, res) => {
-    const { nombre, descripcion, precio, restaurante_id } = req.body; // Obtener el restaurante_id de la vista
+    const { nombre, descripcion, precio, restaurante_id } = req.body;
     try {
+        // Crear la hamburguesa
         const hamburguesa = await Hamburguesa.create({ nombre, descripcion, precio, restaurante_id });
 
+        // Verificar si hay un archivo de imagen
         if (req.files && req.files.imagen) {
             const imagen = req.files.imagen;
             const imagenPath = path.join(__dirname, '..', 'public', 'images', 'hamburguesas', `${hamburguesa.id}.jpg`);
 
-            imagen.mv(imagenPath, function (err) {
-                if (err) {
-                    console.log("Error al subir la imagen: ", err);
-                    return res.status(500).send("Error al subir la imagen.");
-                }
-            });
+            // Mover la imagen al directorio correspondiente
+            await imagen.mv(imagenPath); // Usar await para manejar errores mejor
+
+            // Actualizar el campo 'imagen' en la base de datos con la ruta relativa
+            await hamburguesa.update({ imagen: `/images/hamburguesas/${hamburguesa.id}.jpg` });
         }
 
         res.redirect('/admin/hamburguesas/lista');
     } catch (error) {
+        console.error("Error al crear la hamburguesa:", error);
         res.status(500).send('Error al crear la hamburguesa');
     }
 };
@@ -123,11 +125,12 @@ exports.editarHamburguesaFormAdmin = async (req, res) => {
     }
 };
 
+// Editar hamburguesa (admin)
 exports.editarHamburguesaPostAdmin = async (req, res) => {
     const { nombre, descripcion, precio, restaurante_id } = req.body;
 
     try {
-        // Actualizar los datos de la hamburguesa incluyendo el restaurante
+        // Actualizar los datos de la hamburguesa
         await Hamburguesa.update({ nombre, descripcion, precio, restaurante_id }, { where: { id: req.params.id } });
 
         // Verificar si hay un archivo de imagen y guardarlo
@@ -135,17 +138,16 @@ exports.editarHamburguesaPostAdmin = async (req, res) => {
             const imagen = req.files.imagen;
             const imagenPath = path.join(__dirname, '..', 'public', 'images', 'hamburguesas', `${req.params.id}.jpg`);
 
-            imagen.mv(imagenPath, function (err) {
-                if (err) {
-                    console.log("Error al subir la imagen: ", err);
-                    return res.status(500).send("Error al subir la imagen.");
-                }
-            });
+            // Mover la imagen al directorio correspondiente
+            await imagen.mv(imagenPath); // Usar await para manejar errores mejor
+
+            // Actualizar el campo 'imagen' en la base de datos
+            await Hamburguesa.update({ imagen: `/images/hamburguesas/${req.params.id}.jpg` }, { where: { id: req.params.id } });
         }
 
         res.redirect('/admin/hamburguesas/lista');
-
     } catch (error) {
+        console.error("Error al actualizar la hamburguesa:", error);
         res.status(500).send('Error al actualizar la hamburguesa');
     }
 };

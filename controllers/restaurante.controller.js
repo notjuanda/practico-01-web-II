@@ -37,12 +37,12 @@ exports.crearRestauranteFormAdmin = (req, res) => {
     res.render('admin/restaurantes/crear');
 };
 
-// Procesar creación de un nuevo restaurante (admin)
+// Crear restaurante (admin)
 exports.crearRestaurantePostAdmin = async (req, res) => {
     const { nombre, ubicacion, descripcion } = req.body;
 
     try {
-        // Crear restaurante
+        // Crear el restaurante
         const restaurante = await Restaurante.create({ nombre, ubicacion, descripcion });
 
         // Verificar si hay un archivo de imagen
@@ -57,9 +57,12 @@ exports.crearRestaurantePostAdmin = async (req, res) => {
                     return res.status(500).send("Error al subir la imagen.");
                 }
             });
-        }
-        res.redirect('/admin/restaurantes/lista');
 
+            // Actualizar el campo 'imagen' en la base de datos
+            await restaurante.update({ imagen: `/images/restaurantes/${restaurante.id}.jpg` });
+        }
+
+        res.redirect('/admin/restaurantes/lista');
     } catch (error) {
         res.status(500).send('Error al crear el restaurante');
     }
@@ -75,7 +78,7 @@ exports.editarRestauranteFormAdmin = async (req, res) => {
     }
 };
 
-// Procesar la edición de un restaurante (admin)
+// Editar restaurante (admin)
 exports.editarRestaurantePostAdmin = async (req, res) => {
     const { nombre, ubicacion, descripcion } = req.body;
 
@@ -88,16 +91,19 @@ exports.editarRestaurantePostAdmin = async (req, res) => {
             const imagen = req.files.imagen;
             const imagenPath = path.join(__dirname, '..', 'public', 'images', 'restaurantes', `${req.params.id}.jpg`);
 
+            // Mover la imagen al directorio correspondiente
             imagen.mv(imagenPath, function (err) {
                 if (err) {
                     console.log("Error al subir la imagen: ", err);
                     return res.status(500).send("Error al subir la imagen.");
                 }
             });
+
+            // Actualizar el campo 'imagen' en la base de datos
+            await Restaurante.update({ imagen: `/images/restaurantes/${req.params.id}.jpg` }, { where: { id: req.params.id } });
         }
 
         res.redirect('/admin/restaurantes/lista');
-
     } catch (error) {
         res.status(500).send('Error al actualizar el restaurante');
     }

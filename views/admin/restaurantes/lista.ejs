@@ -18,7 +18,7 @@
             <% restaurantes.forEach(function(restaurante) { %>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <img src="/images/restaurantes/<%= restaurante.id %>.jpg" class="card-img-top" alt="Imagen del Restaurante">
+                        <img src="<%= restaurante.imagen %>" class="card-img-top" alt="Imagen del Restaurante">
                         <div class="card-body">
                             <h5 class="card-title"><%= restaurante.nombre %></h5>
                             <p class="card-text">Ubicación: <%= restaurante.ubicacion %></p>
