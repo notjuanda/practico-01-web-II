@@ -36,20 +36,13 @@ exports.loginForm = (req, res) => {
 exports.loginPost = async (req, res) => {
     const { email, password } = req.body;
 
-    // Validar errores del formulario
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.render('usuarios/login', { errors: errors.array() });
-    }
-
     try {
         const usuario = await Usuario.findOne({ where: { email } });
         if (usuario && await bcrypt.compare(password, usuario.password)) {
-            req.session.user = {
-                id: usuario.id,
-                nombre: usuario.nombre,
-                email: usuario.email
-            };
+            // Guardar solo el ID del usuario en la sesión
+            req.session.usuarioId = usuario.id;
+            req.session.nombreUsuario = usuario.nombre;  // Opcional si deseas guardar más datos
+            console.log("Sesión creada con usuarioId:", req.session.usuarioId);
             res.redirect('/restaurantes/lista');
         } else {
             res.render('usuarios/login', { errors: [{ msg: 'Credenciales incorrectas' }] });
@@ -58,6 +51,7 @@ exports.loginPost = async (req, res) => {
         res.status(500).send('Error al procesar el login');
     }
 };
+
 
 // Logout del usuario
 exports.logout = (req, res) => {

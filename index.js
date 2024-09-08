@@ -19,7 +19,9 @@ app.use(session({
     resave: false,  // No vuelve a guardar la sesión si no ha cambiado
     saveUninitialized: false,  // No guarda sesiones vacías
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24  // La sesión expira en 1 día
+        maxAge: 1000 * 60 * 60 * 24,  // La sesión expira en 1 día
+        secure: false,  // Asegúrate de que esto sea `false` en desarrollo para no requerir HTTPS
+        httpOnly: true  // Previene que el lado del cliente acceda a la cookie
     }
 }));
 

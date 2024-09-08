@@ -28,28 +28,41 @@ exports.listaHamburguesasPorRestaurante = async (req, res) => {
 
 exports.detalleHamburguesa = async (req, res) => {
     try {
+        console.log("Entrando en detalle de la hamburguesa");  // Verificar si la ruta se llama correctamente
+
         const hamburguesa = await Hamburguesa.findByPk(req.params.id);
         if (!hamburguesa) {
+            console.log("Hamburguesa no encontrada");
             return res.status(404).send('Hamburguesa no encontrada');
         }
 
-        // Verificar si el usuario ha marcado la hamburguesa como comida
+        console.log("ID recibido:", req.params.id);
         let comida = false;
         let yaDejoReview = false;
+
         if (req.session.usuarioId) {
+            console.log("Usuario logueado con ID:", req.session.usuarioId);
+
+            // Verificar si el usuario ha marcado la hamburguesa como comida
             const hamburguesaComida = await HamburguesaComida.findOne({
                 where: {
                     usuario_id: req.session.usuarioId,
                     hamburguesa_id: req.params.id
                 }
             });
+
             comida = !!hamburguesaComida;
+            console.log("¿Comida marcada?", comida);
 
             // Verificar si el usuario ya dejó un review para esta hamburguesa
             const reviewExistente = await Review.findOne({
                 where: { usuario_id: req.session.usuarioId, hamburguesa_id: req.params.id }
             });
-            yaDejoReview = !!reviewExistente; // true si ya dejó una reseña
+
+            yaDejoReview = !!reviewExistente;
+            console.log("¿Dejó review?", yaDejoReview);
+        } else {
+            console.log("Usuario no logueado");
         }
 
         // Obtener los reviews de la hamburguesa
@@ -58,9 +71,12 @@ exports.detalleHamburguesa = async (req, res) => {
             include: [{ model: db.Usuario, attributes: ['nombre'] }]
         });
 
+        console.log("Reviews encontrados:", reviews.length);
+
         // Renderizar la vista con la información
         res.render('hamburguesas/detalle', { hamburguesa, comida, reviews, yaDejoReview });
     } catch (error) {
+        console.error("Error en detalle de hamburguesa:", error);
         res.status(500).send('Error al obtener los detalles de la hamburguesa.');
     }
 };

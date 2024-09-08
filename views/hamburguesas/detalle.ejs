@@ -29,7 +29,7 @@
                     <p class="text-success">¡Ya has marcado esta hamburguesa como comida!</p>
                 <% } %>
 
-                <!-- Mostrar mensaje o formulario para dejar review si ya marcó la hamburguesa como comida -->
+                <!-- Mostrar formulario o mensaje según si el usuario ya dejó review -->
                 <% if (comida) { %>
                     <% if (yaDejoReview) { %>
                         <p class="text-warning">Ya dejaste una reseña para esta hamburguesa.</p>
@@ -49,8 +49,6 @@
                     <% } %>
                 <% } %>
             </div>
-        </div>
-
         <!-- Mostrar los reviews existentes -->
         <div class="mt-5">
             <h3>Reseñas</h3>
