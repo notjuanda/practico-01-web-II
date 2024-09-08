@@ -15,16 +15,14 @@
           <li class="nav-item">
             <a class="nav-link active" href="/restaurantes/lista">Restaurantes</a>
           </li>
-          <% if (!user) { %>
-            <!-- Mostrar solo si el usuario NO está autenticado -->
+          <% if (!user) { %> <!-- Verificar si el usuario NO está autenticado -->
             <li class="nav-item">
               <a class="nav-link" href="/usuarios/register">Registro</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/usuarios/login">Iniciar Sesión</a>
             </li>
-          <% } else { %>
-            <!-- Mostrar solo si el usuario está autenticado -->
+          <% } else { %> <!-- Mostrar si el usuario está autenticado -->
             <li class="nav-item">
               <span class="nav-link">Bienvenido, <strong><%= user.nombre %></strong></span>
             </li>

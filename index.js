@@ -33,9 +33,18 @@ app.use(fileUpload({
 
 // Middleware para hacer que la variable `user` esté disponible en todas las vistas
 app.use((req, res, next) => {
-    res.locals.user = req.session.user || null;
+    if (req.session.usuarioId) {
+        // Asignar los valores del usuario a res.locals para que estén disponibles en las vistas
+        res.locals.user = {
+            id: req.session.usuarioId,
+            nombre: req.session.nombreUsuario  // Guardar el nombre si es necesario
+        };
+    } else {
+        res.locals.user = null;
+    }
     next();
 });
+
 
 // Configurar ejs para las vistas
 app.set('view engine', 'ejs');
