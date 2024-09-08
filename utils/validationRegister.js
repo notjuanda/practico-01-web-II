@@ -41,11 +41,11 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     }
 
     if (isValid) {
-        this.submit(); // Si es válido, enviamos el formulario
+        this.submit(); // Si es válido envia el form
     }
 });
 
-// Funciones auxiliares para mostrar/limpiar errores y validar el correo electrónico
+// Funciones auxiliares para mostrar/limpiar errores y validar el correo 
 function showError(input, message) {
     const errorElement = input.nextElementSibling;
     errorElement.textContent = message;

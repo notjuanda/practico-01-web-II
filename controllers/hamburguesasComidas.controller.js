@@ -2,7 +2,7 @@ const db = require('../models');
 const HamburguesaComida = db.HamburguesaComida;
 const Hamburguesa = db.Hamburguesa;
 
-// Marcar que el usuario ha comido una hamburguesa
+// Marcar que se comió una hamburguesa
 exports.marcarHamburguesaComida = async (req, res) => {
     const hamburguesaId = req.params.id;
 
@@ -31,7 +31,7 @@ exports.marcarHamburguesaComida = async (req, res) => {
 };
 
 
-// Mostrar las hamburguesas comidas por el usuario
+// Mostrar las hamburguesas comidas
 exports.listaHamburguesasComidas = async (req, res) => {
     try {
         const hamburguesasComidas = await HamburguesaComida.findAll({

@@ -16,7 +16,6 @@
           </li>
           
           <% if (!user) { %>
-            <!-- Mostrar solo si el usuario NO está autenticado -->
             <li>
               <a href="/usuarios/register" class="text-white">Registro</a>
             </li>
@@ -24,7 +23,6 @@
               <a href="/usuarios/login" class="text-white">Iniciar Sesión</a>
             </li>
           <% } else { %>
-            <!-- Mostrar si el usuario está autenticado -->
             <li>
               <a href="/usuarios/logout" class="text-white">Cerrar Sesión</a>
             </li>

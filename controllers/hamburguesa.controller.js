@@ -28,7 +28,7 @@ exports.listaHamburguesasPorRestaurante = async (req, res) => {
 
 exports.detalleHamburguesa = async (req, res) => {
     try {
-        console.log("Entrando en detalle de la hamburguesa");  // Verificar si la ruta se llama correctamente
+        console.log("Detalle de la hamburguesa");
 
         const hamburguesa = await Hamburguesa.findByPk(req.params.id);
         if (!hamburguesa) {
@@ -43,7 +43,7 @@ exports.detalleHamburguesa = async (req, res) => {
         if (req.session.usuarioId) {
             console.log("Usuario logueado con ID:", req.session.usuarioId);
 
-            // Verificar si el usuario ha marcado la hamburguesa como comida
+            // Verificar si el usuario marcó la hamburguesa como comida
             const hamburguesaComida = await HamburguesaComida.findOne({
                 where: {
                     usuario_id: req.session.usuarioId,
@@ -54,7 +54,7 @@ exports.detalleHamburguesa = async (req, res) => {
             comida = !!hamburguesaComida;
             console.log("¿Comida marcada?", comida);
 
-            // Verificar si el usuario ya dejó un review para esta hamburguesa
+            // Verificar si el usuario dejó un review para la hamburguesa
             const reviewExistente = await Review.findOne({
                 where: { usuario_id: req.session.usuarioId, hamburguesa_id: req.params.id }
             });
@@ -65,7 +65,6 @@ exports.detalleHamburguesa = async (req, res) => {
             console.log("Usuario no logueado");
         }
 
-        // Obtener los reviews de la hamburguesa
         const reviews = await Review.findAll({
             where: { hamburguesa_id: req.params.id },
             include: [{ model: db.Usuario, attributes: ['nombre'] }]
@@ -73,7 +72,6 @@ exports.detalleHamburguesa = async (req, res) => {
 
         console.log("Reviews encontrados:", reviews.length);
 
-        // Renderizar la vista con la información
         res.render('hamburguesas/detalle', { hamburguesa, comida, reviews, yaDejoReview });
     } catch (error) {
         console.error("Error en detalle de hamburguesa:", error);
@@ -84,7 +82,6 @@ exports.detalleHamburguesa = async (req, res) => {
 // Crear hamburguesa (admin)
 exports.crearHamburguesaFormAdmin = async (req, res) => {
     try {
-        // Obtener todos los restaurantes para mostrarlos en el formulario
         const restaurantes = await Restaurante.findAll();
         res.render('admin/hamburguesas/crear', { restaurantes });
     } catch (error) {
@@ -94,12 +91,10 @@ exports.crearHamburguesaFormAdmin = async (req, res) => {
 
 // Procesar creación de una nueva hamburguesa (admin)
 exports.crearHamburguesaPostAdmin = async (req, res) => {
-    const { nombre, descripcion, precio, restaurante_id } = req.body; // Obtener el restaurante_id del formulario
+    const { nombre, descripcion, precio, restaurante_id } = req.body; // Obtener el restaurante_id de la vista
     try {
-        // Crear hamburguesa con el restaurante_id seleccionado
         const hamburguesa = await Hamburguesa.create({ nombre, descripcion, precio, restaurante_id });
 
-        // Guardar la imagen si se sube una
         if (req.files && req.files.imagen) {
             const imagen = req.files.imagen;
             const imagenPath = path.join(__dirname, '..', 'public', 'images', 'hamburguesas', `${hamburguesa.id}.jpg`);
@@ -121,7 +116,7 @@ exports.crearHamburguesaPostAdmin = async (req, res) => {
 exports.editarHamburguesaFormAdmin = async (req, res) => {
     try {
         const hamburguesa = await Hamburguesa.findByPk(req.params.id);
-        const restaurantes = await Restaurante.findAll();  // Obtener los restaurantes para el `select`
+        const restaurantes = await Restaurante.findAll();  
         res.render('admin/hamburguesas/editar', { hamburguesa, restaurantes });
     } catch (error) {
         res.status(500).send('Error al cargar el formulario de edición');

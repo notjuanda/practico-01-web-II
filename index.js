@@ -12,7 +12,7 @@ const app = express();
 
 // Configurar el uso de sesiones con almacenamiento en Sequelize
 app.use(session({
-    secret: 'juanda-secreto',  // Cambia este valor por algo más seguro en producción
+    secret: 'juanda-secreto',
     store: new SequelizeStore({
         db: db.sequelize,
     }),
@@ -20,15 +20,11 @@ app.use(session({
     saveUninitialized: false,  // No guarda sesiones vacías
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,  // La sesión expira en 1 día
-        secure: false,  // Asegúrate de que esto sea `false` en desarrollo para no requerir HTTPS
-        httpOnly: true  // Previene que el lado del cliente acceda a la cookie
     }
 }));
 
-// Usar fileUpload para manejar subida de archivos
 app.use(fileUpload({
     createParentPath: true,
-    limits: { fileSize: 50 * 1024 * 1024 },  // Limite de tamaño de archivo de 50MB
 }));
 
 // Middleware para hacer que la variable `user` esté disponible en todas las vistas
@@ -37,7 +33,7 @@ app.use((req, res, next) => {
         // Asignar los valores del usuario a res.locals para que estén disponibles en las vistas
         res.locals.user = {
             id: req.session.usuarioId,
-            nombre: req.session.nombreUsuario  // Guardar el nombre si es necesario
+            nombre: req.session.nombreUsuario  // Guardar el nombr
         };
     } else {
         res.locals.user = null;

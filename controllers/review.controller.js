@@ -8,13 +8,13 @@ exports.crearReviewPost = async (req, res) => {
     const hamburguesaId = req.params.id;
 
     try {
-        // Verificar si el usuario ha marcado la hamburguesa como comida
+        // Verificar si se comió la hamburguesa
         const comioHamburguesa = await HamburguesaComida.findOne({
             where: { usuario_id: req.session.usuarioId, hamburguesa_id: hamburguesaId }
         });
 
         if (comioHamburguesa) {
-            // Verificar si el usuario ya ha dejado una reseña para esta hamburguesa
+            // Verificar si el usuario ya ha dejado una reseña 
             const yaDejoReview = await Review.findOne({
                 where: { usuario_id: req.session.usuarioId, hamburguesa_id: hamburguesaId }
             });
@@ -31,7 +31,6 @@ exports.crearReviewPost = async (req, res) => {
                     hamburguesa_id: hamburguesaId
                 });
 
-                // Redirigir de nuevo a los detalles de la hamburguesa
                 res.redirect(`/hamburguesas/${hamburguesaId}/detalle`);
             }
         } else {

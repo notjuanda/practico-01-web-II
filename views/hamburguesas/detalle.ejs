@@ -20,7 +20,6 @@
                 <p><%= hamburguesa.descripcion %></p>
                 <p>Precio: $<%= hamburguesa.precio %></p>
 
-                <!-- Mostrar solo si el usuario no ha marcado la hamburguesa como comida -->
                 <% if (!comida) { %>
                     <form action="/hamburguesas-comidas/<%= hamburguesa.id %>/marcar" method="POST">
                         <button type="submit" class="btn btn-success">Marcar como Comida</button>
@@ -29,7 +28,6 @@
                     <p class="text-success">¡Ya has marcado esta hamburguesa como comida!</p>
                 <% } %>
 
-                <!-- Mostrar formulario o mensaje según si el usuario ya dejó review -->
                 <% if (comida) { %>
                     <% if (yaDejoReview) { %>
                         <p class="text-warning">Ya dejaste una reseña para esta hamburguesa.</p>
@@ -49,7 +47,6 @@
                     <% } %>
                 <% } %>
             </div>
-        <!-- Mostrar los reviews existentes -->
         <div class="mt-5">
             <h3>Reseñas</h3>
             <% if (reviews && reviews.length > 0) { %>
@@ -60,9 +57,9 @@
                         <div class="star-rating">
                             <% for (let i = 1; i <= 5; i++) { %>
                                 <% if (i <= review.puntuacion) { %>
-                                    <i class="bi bi-star-fill"></i> <!-- Estrella llena -->
+                                    <i class="bi bi-star-fill"></i> 
                                 <% } else { %>
-                                    <i class="bi bi-star"></i> <!-- Estrella vacía -->
+                                    <i class="bi bi-star"></i> 
                                 <% } %>
                             <% } %>
                         </div>
@@ -75,7 +72,6 @@
     </main>
 
     <%- include('../components/footer') %>
-
     <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

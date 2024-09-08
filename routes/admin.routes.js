@@ -5,16 +5,15 @@ const router = express.Router();
 const restauranteController = require('../controllers/restaurante.controller');
 const hamburguesaController = require('../controllers/hamburguesa.controller');
 
-// ========================
-// Página principal del administrador
-// ========================
+// administrador pagina
+
 router.get('/', (req, res) => {
-    res.render('admin/index');  // Renderizar la vista 'admin/index.ejs'
+    res.render('admin/index'); 
 });
 
-// ========================
-// Rutas de administración para restaurantes
-// ========================
+
+// restaurantes admin
+
 
 // Mostrar lista de restaurantes (admin)
 router.get('/restaurantes/lista', restauranteController.listaRestaurantesAdmin);
@@ -30,9 +29,9 @@ router.post('/restaurantes/:id/editar', restauranteController.editarRestauranteP
 // Eliminar restaurante (admin)
 router.post('/restaurantes/:id/borrar', restauranteController.borrarRestauranteAdmin);
 
-// ========================
-// Rutas de administración para hamburguesas
-// ========================
+
+// hamburguesas admin
+
 
 // Mostrar todas las hamburguesas (admin)
 router.get('/hamburguesas/lista', hamburguesaController.listaHamburguesasAdmin);

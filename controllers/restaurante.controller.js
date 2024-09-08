@@ -58,8 +58,6 @@ exports.crearRestaurantePostAdmin = async (req, res) => {
                 }
             });
         }
-
-        // Redirigir después de crear el restaurante
         res.redirect('/admin/restaurantes/lista');
 
     } catch (error) {
@@ -105,7 +103,7 @@ exports.editarRestaurantePostAdmin = async (req, res) => {
     }
 };
 
-// Procesar la eliminación de un restaurante (admin)
+// eliminar el restaurante
 exports.borrarRestauranteAdmin = async (req, res) => {
     try {
         await Restaurante.destroy({ where: { id: req.params.id } });

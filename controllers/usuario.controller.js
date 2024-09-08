@@ -41,7 +41,7 @@ exports.loginPost = async (req, res) => {
         if (usuario && await bcrypt.compare(password, usuario.password)) {
             // Guardar solo el ID del usuario en la sesión
             req.session.usuarioId = usuario.id;
-            req.session.nombreUsuario = usuario.nombre;  // Opcional si deseas guardar más datos
+            req.session.nombreUsuario = usuario.nombre; // Guardar el nombre del usuario en la sesión
             console.log("Sesión creada con usuarioId:", req.session.usuarioId);
             res.redirect('/restaurantes/lista');
         } else {

@@ -22,7 +22,7 @@ db.Usuario = require("./usuario.model.js")(sequelize, Sequelize.DataTypes);
 db.Restaurante = require("./restaurante.model.js")(sequelize, Sequelize.DataTypes);
 db.Hamburguesa = require("./hamburguesa.model.js")(sequelize, Sequelize.DataTypes);
 db.Review = require("./review.model.js")(sequelize, Sequelize.DataTypes);
-db.HamburguesaComida = require("./HamburguesaComida.model.js")(sequelize, Sequelize.DataTypes);  // Agregado modelo faltante
+db.HamburguesaComida = require("./HamburguesaComida.model.js")(sequelize, Sequelize.DataTypes);
 
 // Relaciones
 

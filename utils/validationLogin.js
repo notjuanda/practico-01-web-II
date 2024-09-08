@@ -23,11 +23,11 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     }
 
     if (isValid) {
-        this.submit(); // Si es válido, enviamos el formulario
+        this.submit(); // Si es válido, envia el form
     }
 });
 
-// Función para mostrar errores dinámicamente
+// Función para mostrar errores en los campos sin recargar
 function showError(input, message) {
     const errorElement = input.nextElementSibling;
     errorElement.textContent = message;
@@ -43,7 +43,7 @@ function clearError(input) {
     input.classList.remove('is-invalid');
 }
 
-// Validar correo electrónico con expresiones regulares
+// Validar correo electrónico no se como se hace xd
 function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
